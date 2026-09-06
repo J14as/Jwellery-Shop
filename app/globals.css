@@ -1,0 +1,314 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties ──────────────────────────────────────── */
+:root {
+  --color-bg: #0A0A0A;
+  --color-bg-elevated: #141414;
+  --color-bg-card: #1A1A1A;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F0DFA0;
+  --color-gold-muted: #B8962E;
+  --color-text: #F5F0E8;
+  --color-text-muted: #9C8E80;
+  --color-border: rgba(212, 175, 55, 0.15);
+
+  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-luxury-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-luxury-out: cubic-bezier(0, 0.55, 0.45, 1);
+
+  --perspective-page: 1200px;
+}
+
+/* ── Base ────────────────────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-jost), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Typography ──────────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { 
+  background: var(--color-gold-muted); 
+  border-radius: 3px; 
+}
+::-webkit-scrollbar-thumb:hover { 
+  background: var(--color-gold); 
+}
+
+/* ── 3D / Perspective Utilities ──────────────────────────────────── */
+.perspective-page {
+  perspective: var(--perspective-page);
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ── Cursor Spotlight ────────────────────────────────────────────── */
+.cursor-spotlight {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  background: radial-gradient(
+    circle,
+    rgba(212, 175, 55, 0.06) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+/* ── Utility classes ─────────────────────────────────────────────── */
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Buttons ── */
+  .btn-gold {
+    @apply inline-flex items-center gap-2 bg-gold text-dark-100 px-8 py-3.5 text-sm tracking-widest uppercase font-medium
+           hover:bg-gold-light transition-all duration-500 relative overflow-hidden;
+  }
+  .btn-gold::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.6s var(--ease-luxury);
+  }
+  .btn-gold:hover::after {
+    transform: translateX(100%);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 border border-gold/60 text-gold px-8 py-3.5 text-sm tracking-widest uppercase font-medium
+           hover:bg-gold hover:text-dark transition-all duration-500;
+  }
+
+  .btn-dark {
+    @apply inline-flex items-center gap-2 bg-dark-50 text-white px-8 py-3.5 text-sm tracking-widest uppercase font-medium
+           hover:bg-dark-100 border border-white/10 transition-all duration-500;
+  }
+
+  /* ── Magnetic Button Wrapper ── */
+  .magnetic-wrap {
+    display: inline-block;
+    position: relative;
+  }
+
+  /* ── Nav Link with Underline Reveal ── */
+  .nav-link-luxury {
+    @apply relative text-xs tracking-[0.15em] uppercase font-medium transition-colors duration-300;
+    color: rgba(245, 240, 232, 0.6);
+  }
+  .nav-link-luxury:hover {
+    color: var(--color-gold);
+  }
+  .nav-link-luxury::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -4px;
+    width: 0;
+    height: 1px;
+    background: var(--color-gold);
+    transition: all 0.4s var(--ease-luxury);
+    transform: translateX(-50%);
+  }
+  .nav-link-luxury:hover::after {
+    width: 100%;
+  }
+
+  /* ── Gold Divider ── */
+  .gold-divider {
+    @apply flex items-center gap-4 my-2;
+  }
+  .gold-divider::before,
+  .gold-divider::after {
+    content: "";
+    @apply flex-1 h-px;
+    background: var(--color-border);
+  }
+
+  /* ── Section Heading ── */
+  .section-label {
+    @apply text-xs tracking-[0.3em] uppercase font-medium;
+    color: var(--color-gold);
+  }
+  .section-heading {
+    @apply font-serif text-4xl md:text-5xl leading-tight;
+    color: var(--color-text);
+  }
+
+  /* ── Price ── */
+  .price-tag {
+    @apply text-xl font-bold;
+    color: var(--color-text);
+  }
+  .price-original {
+    @apply text-sm line-through;
+    color: var(--color-text-muted);
+  }
+
+  /* ── Badges ── */
+  .badge-sale {
+    @apply absolute top-3 left-3 z-10 text-white text-[10px] tracking-widest uppercase px-2.5 py-1 font-medium;
+    background: #dc2626;
+  }
+  .badge-new {
+    @apply absolute top-3 left-3 z-10 text-white text-[10px] tracking-widest uppercase px-2.5 py-1 font-medium;
+    background: var(--color-gold);
+  }
+  .badge-gold {
+    @apply absolute top-3 right-3 z-10 text-dark text-[10px] tracking-widest uppercase px-2.5 py-1 font-medium;
+    background: var(--color-gold);
+  }
+
+  /* ── Input ── */
+  .input-elegant {
+    @apply w-full border-0 border-b bg-transparent px-0 py-3 text-sm
+           focus:ring-0 focus:outline-none transition-colors duration-500;
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  .input-elegant::placeholder {
+    color: var(--color-text-muted);
+  }
+  .input-elegant:focus {
+    border-color: var(--color-gold);
+  }
+
+  /* ── Glass Card ── */
+  .glass-card {
+    background: rgba(26, 26, 26, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+  }
+
+  /* ── Product card (dark) ── */
+  .product-card {
+    @apply relative overflow-hidden;
+    background: var(--color-bg-card);
+    border: 1px solid rgba(212, 175, 55, 0.08);
+    transition: all 0.5s var(--ease-luxury);
+  }
+  .product-card:hover {
+    border-color: rgba(212, 175, 55, 0.25);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5),
+                0 0 40px -10px rgba(212, 175, 55, 0.1);
+  }
+}
+
+/* ── Animations ──────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, #D4AF37 0%, #F0DFA0 50%, #D4AF37 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.7s ease-out forwards;
+}
+
+/* ── Gold Line Animation ────────────────────────────────────────── */
+.gold-line-animated {
+  position: relative;
+  overflow: hidden;
+}
+.gold-line-animated::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-gold) 50%,
+    transparent 100%
+  );
+  animation: lineSlide 3s ease-in-out infinite;
+}
+
+@keyframes lineSlide {
+  0%, 100% { transform: translateX(-100%); }
+  50%      { transform: translateX(100%); }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .cursor-spotlight {
+    display: none;
+  }
+}
+
+/* ── Focus styles ────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* ── Selection ───────────────────────────────────────────────────── */
+::selection {
+  background: rgba(212, 175, 55, 0.3);
+  color: var(--color-text);
+}

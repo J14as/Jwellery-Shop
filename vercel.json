@@ -1,0 +1,22 @@
+{
+  "buildCommand": "npm run build",
+  "env": {
+    "DATABASE_URL": "@database_url",
+    "NEXTAUTH_SECRET": "@nextauth_secret",
+    "NEXTAUTH_URL": "@nextauth_url",
+    "NEXT_PUBLIC_RAZORPAY_KEY_ID": "@razorpay_key_id",
+    "RAZORPAY_SECRET_KEY": "@razorpay_secret_key"
+  },
+  "functions": {
+    "app/api/**/*.ts": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+import React from "react";
+import { Metadata } from "next";
+import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Providers } from "@/components/providers/Providers";
+import "./globals.css";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-jost",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "JEWELS — Haute Joaillerie & Fine Diamonds",
+  description: "Discover certified, handcrafted luxury jewellery. Rings, earrings, necklaces, and bespoke heirlooms.",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${cormorant.variable} ${jost.variable}`} suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
