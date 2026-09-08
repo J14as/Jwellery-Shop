@@ -1,53 +1,31 @@
-import { ProductService } from "@/services/ProductService";
+"use client";
+
+import { useMemo } from "react";
 import { CATEGORIES } from "@/lib/constants";
-import { MOCK_PRODUCTS } from "@/lib/mockProducts";
+import { MOCK_PRODUCTS, ProductItem } from "@/lib/mockProducts";
 import { CategoryFilterView } from "@/components/CategoryFilterView";
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, Sparkles, ShieldCheck } from "lucide-react";
 
 interface Props {
   params: { slug: string };
-  searchParams: { page?: string; sort?: string; metal?: string; price?: string; purity?: string; tag?: string };
+  searchParams?: { page?: string; sort?: string; metal?: string; price?: string; purity?: string; tag?: string };
 }
 
-export async function generateMetadata({ params }: Props) {
-  const category = CATEGORIES.find((c) => c.slug === params.slug);
-  if (!category) return {};
-
-  return {
-    title: `${category.name} Collection | JEWELS Haute Joaillerie`,
-    description: category.description,
+export default function CategoryPage({ params }: Props) {
+  const category = CATEGORIES.find((c) => c.slug === params.slug) || {
+    id: params.slug,
+    name: params.slug.charAt(0).toUpperCase() + params.slug.slice(1),
+    slug: params.slug,
+    description: "Explore our handcrafted haute joaillerie suite crafted with pure gold and certified diamonds.",
   };
-}
 
-export default async function CategoryPage({ params, searchParams }: Props) {
-  const category = CATEGORIES.find((c) => c.slug === params.slug);
-  if (!category) notFound();
-
-  const page = Number(searchParams.page) || 1;
-  
-  let products: any[] = [];
-
-  try {
-    const result = await ProductService.getProducts(page, 12, {
-      categoryId: category.id,
-      sortBy: searchParams.sort,
-    });
-    if (result && result.products.length > 0) {
-      products = result.products;
-    }
-  } catch (err) {
-    // Database fallback
-  }
-
-  // Fallback to mock products if database is empty/unseeded
-  if (products.length === 0) {
+  const products: ProductItem[] = useMemo(() => {
     const categoryMocks = MOCK_PRODUCTS.filter(
       (p) => p.category === category.slug || p.categoryId === category.slug
     );
-    products = categoryMocks;
-  }
+    return categoryMocks.length > 0 ? categoryMocks : MOCK_PRODUCTS;
+  }, [category.slug]);
 
   return (
     <div className="bg-dark min-h-screen pt-8 pb-24 text-white">

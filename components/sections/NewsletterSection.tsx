@@ -59,11 +59,24 @@ export function NewsletterSection() {
     };
   }, [prefersReducedMotion]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (typeof window !== "undefined") {
+      const input = (e.target as HTMLFormElement).querySelector("input");
+      if (input?.value) {
+        input.value = "";
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const toast = require("react-hot-toast").default;
+    toast.success("Welcome to the JEWELS private circle ✨");
+  };
+
   return (
     <section
       ref={sectionRef}
       id="newsletter"
-      className="py-24 md:py-32 relative overflow-hidden"
+      className="py-20 sm:py-24 md:py-32 relative overflow-hidden content-auto"
       style={{ perspective: "1200px" }}
     >
       {/* Animated gold mesh gradient background */}
@@ -81,35 +94,38 @@ export function NewsletterSection() {
       {/* Gold border lines */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-transparent via-gold/30 to-transparent" />
 
-      <div className="container-custom relative z-10 max-w-2xl text-center">
-        <p className="nl-reveal section-label mb-3">Stay in the Loop</p>
-        <h2 className="nl-reveal section-heading mb-4">
+      <div className="container-custom relative z-10 max-w-2xl text-center px-4 sm:px-6">
+        <p className="nl-reveal section-label mb-2 sm:mb-3">Stay in the Loop</p>
+        <h2 className="nl-reveal section-heading mb-3 sm:mb-4 text-3xl sm:text-4xl md:text-5xl">
           Get Exclusive Offers
         </h2>
-        <p className="nl-reveal text-white/40 text-sm mb-12">
+        <p className="nl-reveal text-white/50 text-xs sm:text-sm mb-8 sm:mb-12 font-light max-w-lg mx-auto">
           Subscribe and be the first to know about new collections, early access
           sales, and jewellery care tips.
         </p>
 
         <form
-          className="nl-reveal flex gap-0 max-w-md mx-auto border border-gold/20 bg-dark-50/50 backdrop-blur-sm overflow-hidden group focus-within:border-gold/50 transition-colors duration-500"
-          onSubmit={(e) => e.preventDefault()}
+          className="nl-reveal flex flex-col sm:flex-row max-w-md mx-auto border border-gold/25 bg-dark-50/70 backdrop-blur-md overflow-hidden group focus-within:border-gold/60 transition-colors duration-500 shadow-xl"
+          onSubmit={handleSubmit}
         >
           <input
             type="email"
+            inputMode="email"
+            autoComplete="email"
+            required
             placeholder="Your email address"
-            className="flex-1 px-6 py-4 text-sm bg-transparent text-white placeholder:text-white/30 focus:outline-none focus:ring-0 font-light"
+            className="flex-1 px-4 sm:px-6 py-3.5 sm:py-4 text-xs sm:text-sm bg-transparent text-white placeholder:text-white/30 focus:outline-none focus:ring-0 font-light border-b sm:border-b-0 sm:border-r border-gold/20"
           />
           <button
             type="submit"
-            className="bg-gold text-dark px-8 py-4 text-xs tracking-widest uppercase font-medium hover:bg-gold-light transition-colors duration-300 flex items-center gap-2 whitespace-nowrap"
+            className="bg-gold text-dark px-6 sm:px-8 py-3.5 sm:py-4 text-xs tracking-widest uppercase font-semibold hover:bg-gold-light transition-colors duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
           >
             <Send size={13} />
             Subscribe
           </button>
         </form>
 
-        <p className="nl-reveal text-white/20 text-xs mt-6">
+        <p className="nl-reveal text-white/30 text-[11px] mt-4 sm:mt-6 font-light">
           No spam, ever. Unsubscribe anytime.
         </p>
       </div>

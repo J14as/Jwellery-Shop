@@ -127,7 +127,7 @@ export function CraftsmanshipStory() {
     <section
       ref={sectionRef}
       id="craftsmanship"
-      className="relative py-32 md:py-44 overflow-hidden"
+      className="relative py-20 sm:py-32 md:py-44 overflow-hidden content-auto"
       style={{ perspective: "1500px" }}
     >
       {/* Background Image with Parallax */}
@@ -142,7 +142,7 @@ export function CraftsmanshipStory() {
       </div>
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-dark/75" />
+      <div className="absolute inset-0 bg-dark/80 sm:bg-dark/75" />
       <div
         className="absolute inset-0"
         style={{
@@ -152,16 +152,16 @@ export function CraftsmanshipStory() {
 
       {/* Content */}
       <div ref={contentRef} className="container-custom relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="craft-reveal section-label mb-6">Our Promise</p>
+        <div className="max-w-3xl mx-auto text-center px-2 sm:px-0">
+          <p className="craft-reveal section-label mb-4 sm:mb-6">Our Promise</p>
 
-          <h2 className="craft-reveal font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-8 leading-tight">
+          <h2 className="craft-reveal font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-6 sm:mb-8 leading-tight">
             Crafted with Passion,
             <br />
             <span className="animate-shimmer">Certified for Life</span>
           </h2>
 
-          <p className="craft-reveal text-white/50 max-w-lg mx-auto mb-12 leading-relaxed text-base md:text-lg font-light">
+          <p className="craft-reveal text-white/60 max-w-lg mx-auto mb-8 sm:mb-12 leading-relaxed text-sm sm:text-base md:text-lg font-light">
             Every piece at Jewels is handcrafted by master artisans and certified by
             independent gemological labs — because your trust is our greatest ornament.
           </p>
@@ -177,11 +177,11 @@ export function CraftsmanshipStory() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-14 sm:mt-24 max-w-4xl mx-auto">
           {STATS.map(({ value, suffix, label }) => (
-            <div key={label} className="text-center craft-reveal">
+            <div key={label} className="text-center craft-reveal p-3 sm:p-0 bg-dark-50/40 sm:bg-transparent border sm:border-0 border-gold/10">
               <CountUp target={value} suffix={suffix} />
-              <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-2">
+              <p className="text-white/40 text-[10px] sm:text-xs tracking-[0.2em] uppercase mt-2">
                 {label}
               </p>
             </div>

@@ -139,12 +139,26 @@ function ProductCardLuxury({
     <TiltCard className="product-card group cursor-pointer" maxTilt={6} scale={1.02}>
       {/* Badge */}
       {product.badge && (
-        <span className={`absolute top-3 left-3 z-20 text-[10px] tracking-widest uppercase px-3 py-1 font-medium ${
+        <span className={`absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 text-[9px] sm:text-[10px] tracking-widest uppercase px-2 py-0.5 sm:px-3 sm:py-1 font-medium ${
           product.badge === "New" ? "bg-gold text-dark" : "bg-white/10 backdrop-blur-md text-gold border border-gold/30"
         }`}>
           {product.badge}
         </span>
       )}
+
+      {/* Mobile Wishlist Button */}
+      <button
+        type="button"
+        onClick={handleToggleWishlist}
+        aria-label="Wishlist"
+        className={`md:hidden absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md border transition-all active:scale-90 ${
+          isWishlisted
+            ? "bg-gold text-dark border-gold shadow-[0_0_12px_rgba(212,175,55,0.4)]"
+            : "bg-black/40 text-white/80 border-white/20 active:bg-gold/30"
+        }`}
+      >
+        <Heart size={14} fill={isWishlisted ? "currentColor" : "none"} />
+      </button>
 
       {/* Image */}
       <div className="relative aspect-[3/4] overflow-hidden">
@@ -153,21 +167,23 @@ function ProductCardLuxury({
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-700 ease-luxury group-hover:scale-110"
+            className="object-cover transition-transform duration-700 ease-luxury group-hover:scale-110 group-active:scale-105"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
+          {/* Touch light sheen */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 pointer-events-none" />
           {/* Dark gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
         </Link>
 
-        {/* Quick actions (isolated from Link) */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 flex gap-2 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-luxury z-20 pointer-events-auto">
+        {/* Quick actions (Desktop hover reveal) */}
+        <div className="hidden md:flex absolute bottom-0 left-0 right-0 p-4 gap-2 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-luxury z-20 pointer-events-auto">
           <button
             type="button"
             onClick={handleQuickAdd}
             className={`flex-1 ${
               added ? "bg-emerald-600 text-white" : "bg-gold text-dark hover:bg-gold-light"
-            } text-xs tracking-widest uppercase py-3 transition-colors flex items-center justify-center gap-1.5 font-medium shadow-lg`}
+            } text-xs tracking-widest uppercase py-3 transition-colors flex items-center justify-center gap-1.5 font-medium shadow-lg active:scale-95`}
           >
             {added ? (
               <>
@@ -183,7 +199,7 @@ function ProductCardLuxury({
             type="button"
             onClick={handleToggleWishlist}
             aria-label="Wishlist"
-            className={`backdrop-blur-sm p-3 hover:bg-gold hover:text-dark transition-all duration-300 border border-white/10 ${
+            className={`backdrop-blur-sm p-3 hover:bg-gold hover:text-dark transition-all duration-300 border border-white/10 active:scale-90 ${
               isWishlisted ? "bg-gold/20 text-gold border-gold/30" : "bg-white/10 text-white"
             }`}
           >
@@ -193,19 +209,42 @@ function ProductCardLuxury({
       </div>
 
       {/* Info */}
-      <Link href={`/products/${product.slug}`} className="block p-4 border-t border-gold/10">
-        <h3 className="font-sans text-sm text-white/80 line-clamp-1 mb-2 group-hover:text-gold transition-colors duration-300">
-          {product.name}
-        </h3>
-        <div className="flex items-center gap-2">
-          <span className="font-serif text-lg font-semibold text-white">
-            {product.price}
-          </span>
-          <span className="text-xs text-white/30 line-through">
-            {product.originalPrice}
-          </span>
-        </div>
-      </Link>
+      <div className="p-3 sm:p-4 border-t border-gold/10 flex flex-col justify-between">
+        <Link href={`/products/${product.slug}`} className="block mb-1.5">
+          <h3 className="font-sans text-xs sm:text-sm text-white/80 line-clamp-1 group-hover:text-gold transition-colors duration-300">
+            {product.name}
+          </h3>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="font-serif text-base sm:text-lg font-semibold text-white">
+              {product.price}
+            </span>
+            <span className="text-[11px] sm:text-xs text-white/30 line-through">
+              {product.originalPrice}
+            </span>
+          </div>
+        </Link>
+
+        {/* Mobile quick add button */}
+        <button
+          type="button"
+          onClick={handleQuickAdd}
+          className={`md:hidden mt-2 w-full py-2 text-[10px] tracking-widest uppercase font-semibold flex items-center justify-center gap-1 transition-all active:scale-95 ${
+            added
+              ? "bg-emerald-600 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+              : "bg-gold/15 text-gold border border-gold/30 active:bg-gold active:text-dark"
+          }`}
+        >
+          {added ? (
+            <>
+              <Check size={12} /> Added
+            </>
+          ) : (
+            <>
+              <ShoppingCart size={11} /> Quick Add
+            </>
+          )}
+        </button>
+      </div>
     </TiltCard>
   );
 }

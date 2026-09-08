@@ -151,21 +151,112 @@ export function CategoryFilterView({
     return list;
   }, [initialProducts, purity, price, tag, sort]);
 
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const hasActiveFilters = purity !== "all" || price !== "all" || tag !== "all";
 
   return (
     <div className="w-full">
-      {/* Filter & Sort Bar */}
+      {/* ── Mobile Quick Filter Pills (Horizontal Scroll) ── */}
+      <div className="lg:hidden mb-4 overflow-x-auto scrollbar-hide touch-scroll flex items-center gap-2 pb-1">
+        <button
+          type="button"
+          onClick={() => setMobileFilterOpen(true)}
+          className={`flex-shrink-0 px-3.5 py-2 border flex items-center gap-1.5 text-xs font-medium tracking-wider uppercase ${
+            hasActiveFilters
+              ? "bg-gold text-dark border-gold font-bold shadow-md"
+              : "bg-dark-50 text-gold border-gold/30"
+          }`}
+        >
+          <SlidersHorizontal size={13} />
+          <span>Filters</span>
+          {hasActiveFilters && (
+            <span className="w-4 h-4 rounded-full bg-dark text-gold text-[10px] flex items-center justify-center font-bold">
+              {[purity !== "all", price !== "all", tag !== "all"].filter(Boolean).length}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handlePurityChange(purity === "18k" ? "all" : "18k")}
+          className={`flex-shrink-0 px-3 py-2 border text-xs tracking-wider uppercase transition-colors ${
+            purity === "18k"
+              ? "bg-gold text-dark font-semibold border-gold"
+              : "bg-dark-50 text-white/70 border-white/10"
+          }`}
+        >
+          18K Gold
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handlePurityChange(purity === "22k" ? "all" : "22k")}
+          className={`flex-shrink-0 px-3 py-2 border text-xs tracking-wider uppercase transition-colors ${
+            purity === "22k"
+              ? "bg-gold text-dark font-semibold border-gold"
+              : "bg-dark-50 text-white/70 border-white/10"
+          }`}
+        >
+          22K Gold
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handlePurityChange(purity === "solitaires" ? "all" : "solitaires")}
+          className={`flex-shrink-0 px-3 py-2 border text-xs tracking-wider uppercase transition-colors ${
+            purity === "solitaires"
+              ? "bg-gold text-dark font-semibold border-gold"
+              : "bg-dark-50 text-white/70 border-white/10"
+          }`}
+        >
+          Solitaires
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleTagChange(tag === "bestseller" ? "all" : "bestseller")}
+          className={`flex-shrink-0 px-3 py-2 border text-xs tracking-wider uppercase transition-colors ${
+            tag === "bestseller"
+              ? "bg-gold text-dark font-semibold border-gold"
+              : "bg-dark-50 text-white/70 border-white/10"
+          }`}
+        >
+          Bestsellers
+        </button>
+      </div>
+
+      {/* ── Mobile Sort & Count Bar ── */}
+      <div className="lg:hidden mb-6 flex items-center justify-between p-3 bg-dark-50 border border-gold/15 text-xs">
+        <span className="text-white/40 text-[11px]">
+          {filteredProducts.length} pieces found
+        </span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-white/40 text-[11px] uppercase">Sort:</span>
+          <select
+            value={sort}
+            onChange={(e) => handleSortChange(e.target.value as SortOption)}
+            className="bg-transparent text-gold text-xs font-semibold focus:outline-none cursor-pointer"
+          >
+            <option value="newest" className="bg-dark text-white">Newest</option>
+            <option value="bestseller" className="bg-dark text-white">Most Desired</option>
+            <option value="price_asc" className="bg-dark text-white">Price: Low to High</option>
+            <option value="price_desc" className="bg-dark text-white">Price: High to Low</option>
+            <option value="rating" className="bg-dark text-white">Top Rated</option>
+          </select>
+        </div>
+      </div>
+
+      {/* ── Desktop Filter & Sort Bar ── */}
       <div className="mb-8 space-y-4">
-        <div className="p-4 md:p-5 glass-card border border-gold/15 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 text-xs uppercase tracking-wider">
+        <div className="hidden lg:flex p-5 glass-card border border-gold/15 flex-row justify-between items-center gap-4 text-xs uppercase tracking-wider">
           {/* Filter Categories */}
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2 text-gold font-medium mr-1">
               <SlidersHorizontal size={14} />
               <span>Filters</span>
             </div>
 
-            <div className="h-4 w-px bg-white/10 hidden sm:block" />
+            <div className="h-4 w-px bg-white/10" />
 
             {/* Purity Buttons */}
             <div className="flex flex-wrap items-center gap-1.5">
@@ -215,9 +306,9 @@ export function CategoryFilterView({
               </button>
             </div>
 
-            <div className="h-4 w-px bg-white/10 hidden sm:block" />
+            <div className="h-4 w-px bg-white/10" />
 
-            {/* Price Dropdown / Quick filter */}
+            {/* Price Dropdown */}
             <div className="flex items-center gap-2">
               <select
                 value={price}
@@ -246,7 +337,7 @@ export function CategoryFilterView({
           </div>
 
           {/* Sort Menu & Counter */}
-          <div className="flex items-center gap-4 w-full lg:w-auto justify-between lg:justify-end pt-3 lg:pt-0 border-t lg:border-t-0 border-white/10">
+          <div className="flex items-center gap-4">
             <span className="text-white/40 text-[11px] font-sans">
               {filteredProducts.length} of {initialProducts.length} items
             </span>
@@ -267,6 +358,125 @@ export function CategoryFilterView({
             </div>
           </div>
         </div>
+
+      {/* ── Mobile Filter Modal Drawer ── */}
+      {mobileFilterOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#121212] border-t border-gold/30 rounded-t-2xl max-h-[85vh] overflow-y-auto touch-scroll p-6 space-y-6 animate-fade-up">
+            <div className="flex items-center justify-between pb-4 border-b border-gold/15">
+              <div className="flex items-center gap-2 text-gold font-serif text-lg">
+                <SlidersHorizontal size={18} />
+                <span>Filter Creations</span>
+              </div>
+              <button
+                onClick={() => setMobileFilterOpen(false)}
+                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Purity Section */}
+            <div>
+              <span className="text-[11px] tracking-widest uppercase text-white/50 block mb-3 font-semibold">
+                Metal Purity
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { id: "all", label: "All Purity" },
+                  { id: "18k", label: "18K Gold" },
+                  { id: "22k", label: "22K Gold" },
+                  { id: "solitaires", label: "Solitaires" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handlePurityChange(item.id as PurityFilter)}
+                    className={`py-3 px-3 text-xs tracking-wider uppercase border text-center transition-colors ${
+                      purity === item.id
+                        ? "bg-gold text-dark font-bold border-gold"
+                        : "bg-dark-50 text-white/70 border-white/10"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Price Section */}
+            <div>
+              <span className="text-[11px] tracking-widest uppercase text-white/50 block mb-3 font-semibold">
+                Price Range
+              </span>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { id: "all", label: "All Price Ranges" },
+                  { id: "under-100k", label: "Under ₹1,00,000" },
+                  { id: "100k-200k", label: "₹1,00,000 – ₹2,00,000" },
+                  { id: "above-200k", label: "Above ₹2,00,000" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handlePriceChange(item.id as PriceFilter)}
+                    className={`py-3 px-4 text-xs tracking-wider uppercase border text-left flex justify-between items-center transition-colors ${
+                      price === item.id
+                        ? "bg-gold text-dark font-bold border-gold"
+                        : "bg-dark-50 text-white/70 border-white/10"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {price === item.id && <span className="text-dark font-bold">✓</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Collection Section */}
+            <div>
+              <span className="text-[11px] tracking-widest uppercase text-white/50 block mb-3 font-semibold">
+                Collection Type
+              </span>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: "all", label: "All" },
+                  { id: "bestseller", label: "Bestseller" },
+                  { id: "newArrival", label: "New Arrival" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleTagChange(item.id as TagFilter)}
+                    className={`py-2.5 px-2 text-[11px] tracking-wider uppercase border text-center transition-colors ${
+                      tag === item.id
+                        ? "bg-gold text-dark font-bold border-gold"
+                        : "bg-dark-50 text-white/70 border-white/10"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="pt-4 border-t border-gold/15 flex gap-3">
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="btn-outline flex-1 py-3.5 text-xs border-white/20 text-white/70"
+              >
+                Reset All
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobileFilterOpen(false)}
+                className="btn-gold flex-1 py-3.5 text-xs font-semibold"
+              >
+                View {filteredProducts.length} Items
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
         {/* Active Filters Pill Bar */}
         {hasActiveFilters && (

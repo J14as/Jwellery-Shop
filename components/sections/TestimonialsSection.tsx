@@ -69,8 +69,9 @@ function TestimonialCard({
 
   return (
     <div
-      className="flex-shrink-0 w-[320px] md:w-[380px] h-[320px] cursor-pointer"
+      className="flex-shrink-0 w-[82vw] max-w-[340px] md:w-[380px] h-[300px] sm:h-[320px] cursor-pointer select-none"
       style={{ perspective: "1000px" }}
+      onClick={() => setIsFlipped(!isFlipped)}
       onMouseEnter={() => setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
     >
@@ -83,7 +84,7 @@ function TestimonialCard({
       >
         {/* Front — Quote */}
         <div
-          className="absolute inset-0 backface-hidden glass-card p-8 flex flex-col justify-between"
+          className="absolute inset-0 backface-hidden glass-card p-6 sm:p-8 flex flex-col justify-between border border-gold/15"
           style={{ backfaceVisibility: "hidden" }}
         >
           {/* Stars */}
@@ -98,44 +99,45 @@ function TestimonialCard({
           </div>
 
           {/* Quote */}
-          <p className="text-white/70 text-sm leading-relaxed italic font-light">
+          <p className="text-white/80 text-xs sm:text-sm leading-relaxed italic font-light">
             &ldquo;{testimonial.quote}&rdquo;
           </p>
 
           {/* Hint */}
-          <p className="text-white/20 text-xs tracking-widest uppercase">
-            Hover to reveal
+          <p className="text-gold/60 text-[10px] tracking-widest uppercase flex items-center gap-1">
+            <span className="md:hidden">Tap to reveal patron ↻</span>
+            <span className="hidden md:inline">Hover to reveal patron ↻</span>
           </p>
         </div>
 
         {/* Back — Customer Info */}
         <div
-          className="absolute inset-0 backface-hidden glass-card p-8 flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 backface-hidden glass-card p-6 sm:p-8 flex flex-col items-center justify-center text-center border border-gold/25"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
           }}
         >
-          {/* Avatar placeholder */}
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-4">
-            <span className="font-serif text-2xl text-dark font-bold">
+          {/* Avatar */}
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-3 sm:mb-4 shadow-lg">
+            <span className="font-serif text-xl sm:text-2xl text-dark font-bold">
               {testimonial.name[0]}
             </span>
           </div>
 
-          <h4 className="font-serif text-xl text-white mb-1">
+          <h4 className="font-serif text-lg sm:text-xl text-white mb-0.5">
             {testimonial.name}
           </h4>
-          <p className="text-white/40 text-xs tracking-wider uppercase mb-4">
+          <p className="text-white/40 text-[11px] tracking-wider uppercase mb-3 sm:mb-4">
             {testimonial.location}
           </p>
 
-          <div className="w-8 h-px bg-gold/40 mb-4" />
+          <div className="w-8 h-px bg-gold/40 mb-3" />
 
-          <p className="text-gold text-xs tracking-wider uppercase">
-            Purchased
+          <p className="text-gold text-[10px] sm:text-xs tracking-wider uppercase">
+            Acquired Creation
           </p>
-          <p className="text-white/60 text-sm mt-1">{testimonial.purchase}</p>
+          <p className="text-white/70 text-xs sm:text-sm mt-0.5 font-light">{testimonial.purchase}</p>
         </div>
       </div>
     </div>
@@ -149,7 +151,7 @@ export function TestimonialsSection() {
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
-    const amount = direction === "left" ? -400 : 400;
+    const amount = direction === "left" ? -340 : 340;
     scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
   };
 
@@ -163,8 +165,8 @@ export function TestimonialsSection() {
       {
         x: 0,
         opacity: 0,
-        rotateZ: (i) => (i % 2 === 0 ? -5 : 5),
-        scale: 0.9,
+        rotateZ: (i) => (i % 2 === 0 ? -4 : 4),
+        scale: 0.95,
       },
       {
         x: 0,
@@ -192,7 +194,7 @@ export function TestimonialsSection() {
     <section
       ref={sectionRef}
       id="testimonials"
-      className="py-24 md:py-32 relative overflow-hidden"
+      className="py-20 sm:py-24 md:py-32 relative overflow-hidden content-auto"
       style={{
         background: "linear-gradient(180deg, #0A0A0A 0%, #0D0D0D 50%, #0A0A0A 100%)",
       }}
@@ -207,8 +209,8 @@ export function TestimonialsSection() {
 
       <div className="container-custom relative z-10">
         {/* Heading */}
-        <div className="text-center mb-16">
-          <p className="section-label mb-3">What They Say</p>
+        <div className="text-center mb-10 sm:mb-16">
+          <p className="section-label mb-2 sm:mb-3">What They Say</p>
           <h2 className="section-heading">Voices of Elegance</h2>
         </div>
 
@@ -234,16 +236,12 @@ export function TestimonialsSection() {
           {/* Scrollable container */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 px-2 snap-x snap-mandatory"
-            style={{
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
+            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide pb-4 px-2 snap-x snap-mandatory touch-scroll"
           >
             {TESTIMONIALS.map((testimonial, i) => (
               <div
                 key={testimonial.id}
-                className="testimonial-card-wrap snap-center"
+                className="testimonial-card-wrap snap-center shrink-0"
               >
                 <TestimonialCard testimonial={testimonial} index={i} />
               </div>

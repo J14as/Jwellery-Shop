@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Truck, CheckCircle2, Download, Sparkles } from "lucide-react";
 import { PricingService } from "@/lib/pricing/PricingService";

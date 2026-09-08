@@ -46,7 +46,7 @@ export function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="relative border-t border-gold/10"
+      className="relative border-t border-gold/10 content-auto"
       style={{
         background: "linear-gradient(180deg, #0A0A0A 0%, #060606 100%)",
       }}
@@ -55,15 +55,15 @@ export function Footer() {
       <div className="gold-line-animated" />
 
       {/* Main footer */}
-      <div className="container-custom py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="container-custom py-12 sm:py-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
 
         {/* Brand */}
         <div className="footer-col">
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <span className="font-serif text-2xl tracking-wider text-white">JEWELS</span>
             <p className="text-[9px] tracking-[0.35em] text-gold/60 uppercase mt-1">Luxury Jewellery</p>
           </div>
-          <p className="text-white/30 text-sm leading-relaxed mb-8">
+          <p className="text-white/40 text-xs sm:text-sm leading-relaxed mb-6 sm:mb-8 font-light max-w-sm">
             Crafting timeless jewellery since 2010. Every piece tells a story of love, legacy and craftsmanship.
           </p>
           <div className="flex gap-3">
@@ -76,11 +76,11 @@ export function Footer() {
                 key={label}
                 href="#"
                 aria-label={label}
-                className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/40
-                           hover:border-gold hover:text-gold hover:bg-gold/5 hover:scale-110
+                className="w-11 h-11 border border-white/10 flex items-center justify-center text-white/50
+                           hover:border-gold hover:text-gold hover:bg-gold/5 active:scale-95
                            transition-all duration-300"
               >
-                <Icon size={15} strokeWidth={1.5} />
+                <Icon size={16} strokeWidth={1.5} />
               </a>
             ))}
           </div>
@@ -88,8 +88,8 @@ export function Footer() {
 
         {/* Shop */}
         <div className="footer-col">
-          <h4 className="text-xs tracking-[0.2em] uppercase text-gold/70 mb-6 font-medium">Shop</h4>
-          <ul className="space-y-3">
+          <h4 className="text-xs tracking-[0.2em] uppercase text-gold/80 mb-4 sm:mb-6 font-medium">Shop Creations</h4>
+          <ul className="space-y-2.5">
             {[
               { label: "Rings",     href: "/categories/rings" },
               { label: "Earrings",  href: "/categories/earrings" },
@@ -99,7 +99,7 @@ export function Footer() {
               { label: "Pendants",  href: "/categories/pendants" },
             ].map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="text-sm text-white/30 hover:text-gold transition-colors duration-300">
+                <Link href={l.href} className="text-xs sm:text-sm text-white/50 hover:text-gold py-1 block transition-colors duration-300">
                   {l.label}
                 </Link>
               </li>
@@ -109,8 +109,8 @@ export function Footer() {
 
         {/* Help */}
         <div className="footer-col">
-          <h4 className="text-xs tracking-[0.2em] uppercase text-gold/70 mb-6 font-medium">Help</h4>
-          <ul className="space-y-3">
+          <h4 className="text-xs tracking-[0.2em] uppercase text-gold/80 mb-4 sm:mb-6 font-medium">Concierge &amp; Help</h4>
+          <ul className="space-y-2.5">
             {[
               { label: "Contact Us",         href: "/contact" },
               { label: "Shipping & Returns", href: "/shipping" },
@@ -120,7 +120,7 @@ export function Footer() {
               { label: "Track Order",        href: "/account/orders" },
             ].map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="text-sm text-white/30 hover:text-gold transition-colors duration-300">
+                <Link href={l.href} className="text-xs sm:text-sm text-white/50 hover:text-gold py-1 block transition-colors duration-300">
                   {l.label}
                 </Link>
               </li>
@@ -130,50 +130,50 @@ export function Footer() {
 
         {/* Contact */}
         <div className="footer-col">
-          <h4 className="text-xs tracking-[0.2em] uppercase text-gold/70 mb-6 font-medium">Contact</h4>
-          <ul className="space-y-4">
+          <h4 className="text-xs tracking-[0.2em] uppercase text-gold/80 mb-4 sm:mb-6 font-medium">Atelier Contact</h4>
+          <ul className="space-y-3 sm:space-y-4">
             <li>
-              <a href="mailto:contact@jewels.com" className="flex items-start gap-3 text-sm text-white/30 hover:text-gold transition-colors duration-300 group">
+              <a href="mailto:contact@jewels.com" className="flex items-start gap-3 text-xs sm:text-sm text-white/50 hover:text-gold transition-colors duration-300 group">
                 <Mail size={15} className="mt-0.5 shrink-0" strokeWidth={1.5} />
                 contact@jewels.com
               </a>
             </li>
             <li>
-              <a href="tel:+919876543210" className="flex items-start gap-3 text-sm text-white/30 hover:text-gold transition-colors duration-300 group">
+              <a href="tel:+919876543210" className="flex items-start gap-3 text-xs sm:text-sm text-white/50 hover:text-gold transition-colors duration-300 group">
                 <Phone size={15} className="mt-0.5 shrink-0" strokeWidth={1.5} />
                 +91 98765 43210
               </a>
             </li>
-            <li className="flex items-start gap-3 text-sm text-white/30">
+            <li className="flex items-start gap-3 text-xs sm:text-sm text-white/50">
               <MapPin size={15} className="mt-0.5 shrink-0" strokeWidth={1.5} />
               123 Luxury Lane, Connaught Place,<br />New Delhi — 110001
             </li>
           </ul>
 
-          <div className="mt-8 p-4 border border-gold/10 bg-white/[0.02]">
-            <p className="text-xs text-white/30 mb-1">Mon – Sat &nbsp; 10am – 7pm</p>
-            <p className="text-xs text-white/30">Sun &nbsp; 11am – 5pm</p>
+          <div className="mt-6 p-3.5 border border-gold/10 bg-white/[0.02]">
+            <p className="text-[11px] text-white/40 mb-0.5">Mon – Sat &nbsp; 10am – 7pm</p>
+            <p className="text-[11px] text-white/40">Sun &nbsp; 11am – 5pm</p>
           </div>
         </div>
       </div>
 
       {/* Bottom bar */}
       <div className="border-t border-white/5">
-        <div className="container-custom py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/20">
-            &copy; {new Date().getFullYear()} Jewels Luxury. All rights reserved.
+        <div className="container-custom py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+          <p className="text-[11px] text-white/30">
+            &copy; {new Date().getFullYear()} JEWELS Haute Joaillerie. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             {["Privacy Policy", "Terms", "Cancellation"].map((l) => (
-              <Link key={l} href="#" className="text-xs text-white/20 hover:text-gold/60 transition-colors duration-300">
+              <Link key={l} href="#" className="text-[11px] text-white/30 hover:text-gold/80 transition-colors duration-300 py-1">
                 {l}
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-2 text-xs text-white/20">
-            <span>We accept:</span>
-            {["UPI", "CARD", "COD"].map((method) => (
-              <span key={method} className="border border-white/10 px-2 py-0.5 text-[10px] tracking-wider">
+          <div className="flex items-center gap-2 text-[11px] text-white/30">
+            <span>Accepted:</span>
+            {["UPI", "CARDS", "NETBANKING"].map((method) => (
+              <span key={method} className="border border-white/10 px-2 py-0.5 text-[9px] tracking-wider text-white/50">
                 {method}
               </span>
             ))}

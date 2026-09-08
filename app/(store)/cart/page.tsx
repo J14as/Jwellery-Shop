@@ -96,10 +96,10 @@ export default function CartPage() {
             {items.map((item) => (
               <div
                 key={`${item.id}-${item.size || "default"}`}
-                className="glass-card p-6 border border-gold/15 flex flex-col sm:flex-row items-start sm:items-center gap-6 group hover:border-gold/35 transition-colors duration-300"
+                className="glass-card p-4 sm:p-6 border border-gold/15 flex flex-row items-start sm:items-center gap-4 sm:gap-6 group hover:border-gold/35 transition-colors duration-300"
               >
                 {/* Image */}
-                <div className="relative w-24 h-28 sm:w-28 sm:h-32 flex-shrink-0 bg-dark-100 border border-gold/10 overflow-hidden">
+                <div className="relative w-20 h-24 sm:w-28 sm:h-32 flex-shrink-0 bg-dark-100 border border-gold/10 overflow-hidden rounded-none">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -110,34 +110,39 @@ export default function CartPage() {
 
                 {/* Details */}
                 <div className="flex-1 min-w-0">
-                  <Link
-                    href={`/products/${item.slug}`}
-                    className="font-serif text-lg md:text-xl text-white hover:text-gold transition-colors block mb-1 truncate"
-                  >
-                    {item.name}
-                  </Link>
-
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-white/50 mb-4">
-                    {item.metal && <span>{item.metal}</span>}
-                    {item.size && <span>• Size: {item.size}</span>}
-                    <span className="text-gold">• Certified Purity</span>
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 mb-1">
+                    <Link
+                      href={`/products/${item.slug}`}
+                      className="font-serif text-base sm:text-xl text-white hover:text-gold transition-colors block truncate"
+                    >
+                      {item.name}
+                    </Link>
+                    <span className="font-serif text-base sm:text-xl font-semibold text-white sm:text-right block">
+                      {PricingService.formatPrice(item.price * item.quantity)}
+                    </span>
                   </div>
 
-                  <div className="flex items-center gap-6">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] sm:text-xs text-white/50 mb-3 sm:mb-4">
+                    {item.metal && <span>{item.metal}</span>}
+                    {item.size && <span>• Size: {item.size}</span>}
+                    <span className="text-gold hidden xs:inline">• Certified</span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between sm:justify-start gap-4 sm:gap-6 pt-1">
                     {/* Quantity Selector */}
                     <div className="flex items-center border border-gold/20 bg-dark-50 text-xs">
                       <button
                         onClick={() => updateQuantity(item.id, -1, item.size)}
                         aria-label="Decrease quantity"
-                        className="px-3 py-1.5 text-white/70 hover:text-gold transition-colors"
+                        className="px-2.5 sm:px-3 py-1.5 text-white/70 hover:text-gold transition-colors"
                       >
                         <Minus size={12} />
                       </button>
-                      <span className="px-3 font-semibold text-white">{item.quantity}</span>
+                      <span className="px-2.5 sm:px-3 font-semibold text-white">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.id, 1, item.size)}
                         aria-label="Increase quantity"
-                        className="px-3 py-1.5 text-white/70 hover:text-gold transition-colors"
+                        className="px-2.5 sm:px-3 py-1.5 text-white/70 hover:text-gold transition-colors"
                       >
                         <Plus size={12} />
                       </button>
@@ -149,24 +154,12 @@ export default function CartPage() {
                         removeItem(item.id, item.size);
                         toast.success(`${item.name} removed from bag`);
                       }}
-                      className="text-xs text-white/40 hover:text-red-400 flex items-center gap-1 transition-colors"
+                      className="text-xs text-white/40 hover:text-red-400 flex items-center gap-1 transition-colors py-1"
                     >
                       <Trash2 size={13} />
                       <span>Remove</span>
                     </button>
                   </div>
-                </div>
-
-                {/* Price */}
-                <div className="sm:text-right w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-white/5">
-                  <span className="font-serif text-xl font-semibold text-white block">
-                    {PricingService.formatPrice(item.price * item.quantity)}
-                  </span>
-                  {item.quantity > 1 && (
-                    <span className="text-[11px] text-white/40 block">
-                      {PricingService.formatPrice(item.price)} each
-                    </span>
-                  )}
                 </div>
               </div>
             ))}

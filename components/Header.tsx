@@ -207,59 +207,182 @@ export function Header() {
           </div>
         </div>
 
-        {/* ── Mobile Full-Screen Overlay ── */}
+        {/* ── Mobile Drawer Overlay ── */}
         <AnimatePresence>
           {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 top-0 z-40 bg-dark/98 backdrop-blur-xl lg:hidden"
-            >
-              <div className="flex flex-col items-center justify-center h-full gap-8">
-                {NAV.map((item, i) => (
-                  <motion.div
-                    key={item.href}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{
-                      delay: 0.05 + i * 0.06,
-                      duration: 0.5,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="font-serif text-3xl text-white/80 hover:text-gold transition-colors duration-300 tracking-wider"
-                    >
-                      {item.label}
-                    </Link>
-                  </motion.div>
-                ))}
+            <div className="fixed inset-0 z-50 lg:hidden">
+              {/* Dimmed backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                onClick={() => setMenuOpen(false)}
+                className="absolute inset-0 bg-black/80 backdrop-blur-md"
+              />
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.5 }}
-                  className="mt-8 pt-8 border-t border-gold/20"
-                >
-                  {session ? (
-                    <div className="flex flex-col items-center gap-4">
-                      <Link href="/account/orders" onClick={() => setMenuOpen(false)}
-                        className="text-sm text-white/60 hover:text-gold transition-colors">My Orders</Link>
-                      <button onClick={() => { signOut(); setMenuOpen(false); }}
-                        className="text-sm text-white/40 hover:text-red-400 transition-colors">Sign Out</button>
+              {/* Slide Drawer */}
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute top-0 right-0 bottom-0 w-[88vw] max-w-sm bg-[#0E0E0E] border-l border-gold/20 shadow-2xl flex flex-col justify-between overflow-hidden z-10"
+              >
+                {/* Drawer Header */}
+                <div className="p-5 border-b border-gold/15 flex items-center justify-between">
+                  <Link
+                    href="/"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex flex-col leading-none"
+                  >
+                    <span className="font-serif text-xl text-white tracking-widest">JEWELS</span>
+                    <span className="text-[8px] tracking-[0.3em] text-gold/70 uppercase mt-0.5">
+                      Haute Joaillerie
+                    </span>
+                  </Link>
+                  <button
+                    onClick={() => setMenuOpen(false)}
+                    className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-gold hover:border-gold transition-colors"
+                    aria-label="Close navigation"
+                  >
+                    <X size={18} strokeWidth={1.5} />
+                  </button>
+                </div>
+
+                {/* Drawer Links Body (Scrollable for all screen heights) */}
+                <div className="flex-1 overflow-y-auto touch-scroll p-6 space-y-6">
+                  {/* Category Nav */}
+                  <div>
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-gold/60 block mb-3 font-medium">
+                      Creations &amp; Atelier
+                    </span>
+                    <div className="space-y-1">
+                      {NAV.map((item, i) => (
+                        <motion.div
+                          key={item.href}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.04 * i, duration: 0.3 }}
+                        >
+                          <Link
+                            href={item.href}
+                            onClick={() => setMenuOpen(false)}
+                            className="flex items-center justify-between py-2.5 text-base font-serif text-white/90 hover:text-gold transition-colors border-b border-white/[0.04]"
+                          >
+                            <span>{item.label}</span>
+                            <span className="text-gold/40 text-xs">→</span>
+                          </Link>
+                        </motion.div>
+                      ))}
                     </div>
-                  ) : (
-                    <Link href="/auth/sign-in" onClick={() => setMenuOpen(false)}
-                      className="text-sm tracking-[0.2em] uppercase text-gold font-medium">Sign In</Link>
-                  )}
-                </motion.div>
-              </div>
-            </motion.div>
+                  </div>
+
+                  {/* Quick Shortcuts: Cart & Wishlist */}
+                  <div className="pt-2">
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-gold/60 block mb-3 font-medium">
+                      Your Selections
+                    </span>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <Link
+                        href="/cart"
+                        onClick={() => setMenuOpen(false)}
+                        className="p-3 bg-dark-50 border border-gold/20 flex items-center justify-between hover:border-gold transition-colors"
+                      >
+                        <div className="flex items-center gap-2 text-xs text-white">
+                          <ShoppingCart size={15} className="text-gold" />
+                          <span>Bag</span>
+                        </div>
+                        {mounted && (
+                          <span className="text-[11px] font-bold text-gold bg-gold/15 px-2 py-0.5">
+                            {itemCount}
+                          </span>
+                        )}
+                      </Link>
+
+                      <Link
+                        href="/wishlist"
+                        onClick={() => setMenuOpen(false)}
+                        className="p-3 bg-dark-50 border border-gold/20 flex items-center justify-between hover:border-gold transition-colors"
+                      >
+                        <div className="flex items-center gap-2 text-xs text-white">
+                          <Heart size={15} className="text-gold" />
+                          <span>Wishlist</span>
+                        </div>
+                        {mounted && (
+                          <span className="text-[11px] font-bold text-gold bg-gold/15 px-2 py-0.5">
+                            {wishlistCount}
+                          </span>
+                        )}
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Patron Account Section */}
+                  <div className="pt-2 border-t border-gold/15">
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-gold/60 block mb-3 font-medium">
+                      Patron Services
+                    </span>
+                    {session ? (
+                      <div className="space-y-2 bg-dark-50 p-3.5 border border-white/10 text-xs">
+                        <div className="pb-2 border-b border-white/10">
+                          <p className="text-white font-medium truncate">{session.user?.name}</p>
+                          <p className="text-[11px] text-white/40 truncate">{session.user?.email}</p>
+                        </div>
+                        <Link
+                          href="/account/orders"
+                          onClick={() => setMenuOpen(false)}
+                          className="block py-1.5 text-white/80 hover:text-gold transition-colors"
+                        >
+                          My Acquisitions &amp; Orders
+                        </Link>
+                        <Link
+                          href="/account/profile"
+                          onClick={() => setMenuOpen(false)}
+                          className="block py-1.5 text-white/80 hover:text-gold transition-colors"
+                        >
+                          Atelier Profile &amp; Settings
+                        </Link>
+                        {(session.user as any)?.role === "ADMIN" && (
+                          <Link
+                            href="/admin/dashboard"
+                            onClick={() => setMenuOpen(false)}
+                            className="block py-1.5 text-gold font-medium hover:underline"
+                          >
+                            Director Admin Dashboard
+                          </Link>
+                        )}
+                        <button
+                          onClick={() => {
+                            signOut();
+                            setMenuOpen(false);
+                          }}
+                          className="w-full text-left pt-2 text-white/40 hover:text-red-400 border-t border-white/10 transition-colors"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    ) : (
+                      <Link
+                        href="/auth/sign-in"
+                        onClick={() => setMenuOpen(false)}
+                        className="w-full btn-gold justify-center py-3 text-xs"
+                      >
+                        Sign In as Patron
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+                {/* Drawer Footer Contact */}
+                <div className="p-5 border-t border-gold/15 bg-black/40 text-center">
+                  <p className="text-[11px] text-white/50 mb-1">Concierge: +91 98765 43210</p>
+                  <p className="text-[9px] text-white/30 tracking-widest uppercase">
+                    Delhi Atelier · Mon - Sat 10am - 7pm
+                  </p>
+                </div>
+              </motion.div>
+            </div>
           )}
         </AnimatePresence>
       </header>

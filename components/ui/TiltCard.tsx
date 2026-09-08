@@ -13,9 +13,9 @@ interface TiltCardProps {
 }
 
 /**
- * Reusable 3D tilt-on-hover card component.
- * Tracks mouse position within the card and applies subtle rotateX/rotateY.
- * Disables on mobile (touch) and reduced-motion.
+ * Reusable 3D tilt-on-hover & tilt-on-touch card component.
+ * Tracks mouse & touch position within the card, applying dynamic rotateX/rotateY
+ * and spotlight glare on mobile touch movement.
  */
 export function TiltCard({
   children,
@@ -29,32 +29,31 @@ export function TiltCard({
   const glareRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (prefersReducedMotion || !cardRef.current) return;
-
+  const applyTilt = useCallback(
+    (clientX: number, clientY: number) => {
+      if (!cardRef.current) return;
       const rect = cardRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
       const rotateX = ((y - centerY) / centerY) * -maxTilt;
       const rotateY = ((x - centerX) / centerX) * maxTilt;
 
-      cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${scale}, ${scale}, ${scale})`;
+      cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(${scale}, ${scale}, ${scale})`;
 
       if (glareRef.current && glare) {
         const glareX = (x / rect.width) * 100;
         const glareY = (y / rect.height) * 100;
-        glareRef.current.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(212,175,55,0.15) 0%, transparent 60%)`;
+        glareRef.current.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(212,175,55,0.22) 0%, transparent 65%)`;
         glareRef.current.style.opacity = "1";
       }
     },
-    [maxTilt, scale, glare, prefersReducedMotion]
+    [maxTilt, scale, glare]
   );
 
-  const handleMouseLeave = useCallback(() => {
+  const resetTilt = useCallback(() => {
     if (!cardRef.current) return;
     cardRef.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
     if (glareRef.current) {
@@ -62,12 +61,42 @@ export function TiltCard({
     }
   }, []);
 
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (prefersReducedMotion) return;
+      applyTilt(e.clientX, e.clientY);
+    },
+    [applyTilt, prefersReducedMotion]
+  );
+
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (prefersReducedMotion || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      applyTilt(touch.clientX, touch.clientY);
+    },
+    [applyTilt, prefersReducedMotion]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (prefersReducedMotion || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      applyTilt(touch.clientX, touch.clientY);
+    },
+    [applyTilt, prefersReducedMotion]
+  );
+
   return (
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={`relative ${className}`}
+      onMouseLeave={resetTilt}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={resetTilt}
+      onTouchCancel={resetTilt}
+      className={`relative active:scale-[0.98] ${className}`}
       style={{
         transformStyle: "preserve-3d",
         transition: `transform ${speed}ms cubic-bezier(0.03, 0.98, 0.52, 0.99)`,

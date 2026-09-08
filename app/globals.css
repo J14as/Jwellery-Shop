@@ -26,11 +26,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -38,6 +41,14 @@ body {
   color: var(--color-text);
   font-family: var(--font-jost), system-ui, sans-serif;
   overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  touch-action: manipulation;
+}
+
+/* Touch & Button Optimizations */
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }
 
 /* ── Typography ──────────────────────────────────────────────────── */
@@ -45,10 +56,11 @@ h1, h2, h3, h4 {
   font-family: var(--font-cormorant), Georgia, serif;
   font-weight: 600;
   letter-spacing: 0.01em;
+  text-wrap: balance;
 }
 
 /* ── Scrollbar ───────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }
 ::-webkit-scrollbar-thumb { 
   background: var(--color-gold-muted); 
@@ -56,6 +68,27 @@ h1, h2, h3, h4 {
 }
 ::-webkit-scrollbar-thumb:hover { 
   background: var(--color-gold); 
+}
+
+/* Hide scrollbar for clean touch carousels */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth Touch Momentum Scrolling */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* Performance acceleration for heavy offscreen sections */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px;
 }
 
 /* ── 3D / Perspective Utilities ──────────────────────────────────── */
@@ -97,7 +130,7 @@ h1, h2, h3, h4 {
 
   /* ── Buttons ── */
   .btn-gold {
-    @apply inline-flex items-center gap-2 bg-gold text-dark-100 px-8 py-3.5 text-sm tracking-widest uppercase font-medium
+    @apply inline-flex items-center justify-center gap-2 bg-gold text-dark-100 px-6 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm tracking-widest uppercase font-medium
            hover:bg-gold-light transition-all duration-500 relative overflow-hidden;
   }
   .btn-gold::after {
@@ -118,12 +151,12 @@ h1, h2, h3, h4 {
   }
 
   .btn-outline {
-    @apply inline-flex items-center gap-2 border border-gold/60 text-gold px-8 py-3.5 text-sm tracking-widest uppercase font-medium
+    @apply inline-flex items-center justify-center gap-2 border border-gold/60 text-gold px-6 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm tracking-widest uppercase font-medium
            hover:bg-gold hover:text-dark transition-all duration-500;
   }
 
   .btn-dark {
-    @apply inline-flex items-center gap-2 bg-dark-50 text-white px-8 py-3.5 text-sm tracking-widest uppercase font-medium
+    @apply inline-flex items-center justify-center gap-2 bg-dark-50 text-white px-6 py-3 sm:px-8 sm:py-3.5 text-xs sm:text-sm tracking-widest uppercase font-medium
            hover:bg-dark-100 border border-white/10 transition-all duration-500;
   }
 

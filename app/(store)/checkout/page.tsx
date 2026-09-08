@@ -309,11 +309,12 @@ export default function CheckoutPage() {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="sm:col-span-2">
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       Full Legal Name *
                     </label>
                     <input
                       type="text"
+                      autoComplete="name"
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
@@ -322,11 +323,13 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       Email for Certificate &amp; Tracking *
                     </label>
                     <input
                       type="email"
+                      inputMode="email"
+                      autoComplete="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
@@ -335,11 +338,13 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       Contact Number for OTP &amp; Courier *
                     </label>
                     <input
                       type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
@@ -348,11 +353,12 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       Street Address / Residence *
                     </label>
                     <input
                       type="text"
+                      autoComplete="street-address"
                       value={formData.addressLine1}
                       onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
                       className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
@@ -361,11 +367,12 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       Apartment, Suite, Landmark (Optional)
                     </label>
                     <input
                       type="text"
+                      autoComplete="address-line2"
                       value={formData.addressLine2}
                       onChange={(e) => setFormData({ ...formData, addressLine2: e.target.value })}
                       className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
@@ -373,11 +380,12 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       City *
                     </label>
                     <input
                       type="text"
+                      autoComplete="address-level2"
                       value={formData.city}
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                       className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
@@ -386,11 +394,12 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       State *
                     </label>
                     <input
                       type="text"
+                      autoComplete="address-level1"
                       value={formData.state}
                       onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                       className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
@@ -399,27 +408,29 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       Postal PIN Code *
                     </label>
                     <input
                       type="text"
+                      inputMode="numeric"
+                      autoComplete="postal-code"
                       value={formData.postalCode}
                       onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
-                      className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold"
+                      className="w-full bg-dark-50 border border-gold/20 p-3 text-sm text-white focus:outline-none focus:border-gold font-mono"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5">
+                    <label className="text-xs text-white/50 tracking-wider uppercase block mb-1.5 font-medium">
                       Country
                     </label>
                     <input
                       type="text"
                       value={formData.country}
                       disabled
-                      className="w-full bg-dark-100 border border-white/10 p-3 text-sm text-white/50"
+                      className="w-full bg-dark-100 border border-white/10 p-3 text-sm text-white/50 cursor-not-allowed"
                     />
                   </div>
                 </div>

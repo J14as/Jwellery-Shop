@@ -16,7 +16,7 @@ interface SmoothScrollProviderProps {
 
 /**
  * Wraps the page in Lenis smooth scroll integrated with GSAP ScrollTrigger.
- * Respects prefers-reduced-motion — disables smooth scroll if user prefers.
+ * On mobile/touch devices, leverages native 120Hz momentum scrolling with continuous ScrollTrigger synchronization.
  */
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const lenisRef = useRef<Lenis | null>(null);
@@ -25,11 +25,39 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
+    // Check if device is a mobile / touch device
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) ||
+        window.innerWidth < 1024);
+
+    // On touch devices, allow native momentum scrolling while keeping GSAP ScrollTrigger active & synchronized
+    if (isTouchDevice) {
+      const handleNativeScroll = () => {
+        ScrollTrigger.update();
+      };
+
+      window.addEventListener("scroll", handleNativeScroll, { passive: true });
+
+      // Refresh ScrollTrigger after DOM renders
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+
+      return () => {
+        window.removeEventListener("scroll", handleNativeScroll);
+        clearTimeout(timer);
+      };
+    }
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.1,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
       infinite: false,
+      smoothWheel: true,
+      syncTouch: false,
+      touchMultiplier: 1,
     });
 
     lenisRef.current = lenis;
@@ -37,16 +65,19 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     // Sync Lenis with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const tickerCallback = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
+
+    gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       lenisRef.current = null;
     };
   }, [prefersReducedMotion]);
 
-  return <div id="smooth-wrapper">{children}</div>;
+  return <div id="smooth-wrapper" className="w-full">{children}</div>;
 }

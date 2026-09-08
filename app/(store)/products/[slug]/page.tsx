@@ -107,7 +107,7 @@ export default function ProductDetailPage({ params }: Props) {
           {/* Gallery Column (7 cols) */}
           <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-6">
             {/* Thumbnails */}
-            <div className="flex md:flex-col gap-3.5 overflow-x-auto md:overflow-visible">
+            <div className="flex md:flex-col gap-3.5 overflow-x-auto md:overflow-visible touch-scroll scrollbar-hide py-1">
               {images.map((img, idx) => (
                 <button
                   key={idx}
@@ -391,13 +391,13 @@ export default function ProductDetailPage({ params }: Props) {
       </div>
 
       {/* Related Creations */}
-      <div className="container-custom">
-        <div className="text-center mb-12">
+      <div className="container-custom mb-16 lg:mb-0">
+        <div className="text-center mb-8 sm:mb-12">
           <span className="section-label mb-2 block">Pair With</span>
           <h2 className="section-heading">Complementary Creations</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {relatedProducts.map((p) => (
             <ProductCard
               key={p.id}
@@ -413,6 +413,62 @@ export default function ProductDetailPage({ params }: Props) {
               newArrival={p.newArrival}
             />
           ))}
+        </div>
+      </div>
+
+      {/* ── Sticky Mobile Purchase Bar (Always within thumb reach) ── */}
+      <div className="fixed bottom-0 left-0 right-0 p-3 bg-dark-100/95 backdrop-blur-xl border-t border-gold/25 z-40 lg:hidden flex items-center justify-between gap-3 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] pb-safe">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          <div className="relative w-10 h-10 rounded border border-gold/20 flex-shrink-0 overflow-hidden bg-dark-50">
+            <Image src={currentImage} alt={product.name} fill className="object-cover" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs font-serif text-white truncate">{product.name}</p>
+            <p className="text-xs font-bold text-gold">{PricingService.formatPrice(product.sellingPrice)}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            onClick={() => {
+              const added = toggleWishlist({
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                price: product.sellingPrice,
+                originalPrice: product.mrp,
+                image: currentImage,
+                category: product.category,
+                metal: product.metalType,
+              });
+              toast(added ? "Saved to Wishlist ✨" : "Removed from Wishlist", {
+                icon: added ? "💛" : "🤍",
+              });
+            }}
+            aria-label="Wishlist"
+            className={`p-2.5 border transition-colors ${
+              isWishlisted ? "text-gold bg-gold/20 border-gold" : "text-white/60 border-white/20 bg-dark-50"
+            }`}
+          >
+            <Heart size={15} fill={isWishlisted ? "currentColor" : "none"} />
+          </button>
+
+          <button
+            onClick={handleAddToCart}
+            className={`px-4 py-2.5 text-xs tracking-wider uppercase font-semibold flex items-center gap-1.5 transition-all shadow-md ${
+              isAdding ? "bg-emerald-600 text-white" : "bg-gold text-dark font-bold active:bg-gold-light"
+            }`}
+          >
+            {isAdding ? (
+              <>
+                <Check size={14} /> Added
+              </>
+            ) : (
+              <>
+                <ShoppingBag size={14} /> Add to Cart
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>
